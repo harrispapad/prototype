@@ -5,6 +5,7 @@ const path = require("path");
 const authRoutes = require('./routes/authRoutes.js');
 const database = require("./db/db")
 const { authenticate, authorize } = require('./login/authMiddleware');
+const healthcheckRoute = require("./admin/healthCheck.js");
 
 
 dotenv.config();
@@ -28,29 +29,31 @@ app.get('/', (req, res) => {
 
 app.get('/api', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  });
-  
-  app.get('/api/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
-  });
-  
-  app.get('/api/failedLogin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'failedLogin.html'));
-  });
-  
-  app.get('/api/dashboard', (req, res) => {
-    const { username } = req.query;  // Extract username from the query string
-    
-    // Send the dashboard page with a welcome message
-    res.send(`<h1>Welcome, ${username}!</h1>`);
-  });
+});
 
-  app.get('/api/admin', authenticate, authorize(['admin']), (req, res) => {
-    res.send(`<h1>Welcome to the admin panel, ${req.user.username}!</h1>`);
-  });
+app.get('/api/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+app.get('/api/failedLogin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'failedLogin.html'));
+});
+
+app.get('/api/dashboard', (req, res) => {
+  const { username } = req.query;  // Extract username from the query string
   
-  database.connectDB();
+  // Send the dashboard page with a welcome message
+  res.send(`<h1>Welcome, ${username}!</h1>`);
+});
+
+app.get('/api/admin', authenticate, authorize(['admin']), (req, res) => {
+  res.status(200).sendFile(path.join(__dirname, 'public', 'adminDashboard.html'));
+    });
+
+app.use("/api/admin", healthcheckRoute);
+ 
+database.connectDB();
   
-  app.listen(port, () => {
+app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
   });

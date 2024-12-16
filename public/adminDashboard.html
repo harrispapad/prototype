@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <div class="button-container">
+            <!-- Health Check Button -->
+            <button id="healthcheck-btn" class="btn" onclick="window.location.href='http://localhost:9115/api/admin/healthcheck'">
+                Health Check
+            </button>
+            
+            <!-- Reset Stations Button -->
+            <button id="resetstations-btn" class="btn">Reset Stations</button>
+            
+            <!-- Reset Passes Button -->
+            <button id="resetpasses-btn" class="btn">Reset Passes</button>
+            
+            <!-- Add Passes Button -->
+            <button id="addpasses-btn" class="btn">Add Passes</button>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
