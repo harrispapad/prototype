@@ -9,16 +9,11 @@ const dbConfig = {
   host: "localhost",
   user: "harris",
   password: "Database@10", // Replace with your MySQL root password
-  database: "auth_db",
+  database: "devOps",
 };
 
 // Function to register a user
-async function registerUser(username, password) {
-  if (!username || !password) {
-    console.error("Error: Username or Password cannot be empty.");
-    process.exit(1);
-  }
-
+async function registerUser(username, password, access_level) {
   try {
     // Connect to the database
     const connection = await mysql.createConnection(dbConfig);
@@ -33,7 +28,7 @@ async function registerUser(username, password) {
       VALUES (?, ?, ?)
     `;
 
-    const [result] = await connection.execute(insertQuery, [username, hashedPassword, acccess_level]);
+    const [result] = await connection.execute(insertQuery, [username, hashedPassword, access_level]);
 
     console.log("User registered successfully with userId:", result.insertId);
 
@@ -56,7 +51,7 @@ program
   .description("Register a new user")
   .requiredOption("--username <username>", "Username for the new user")
   .requiredOption("--password <password>", "Password for the new user")
-  .requiredOption("--access_level <access_level", "User access level")
+  .option("--access_level <access_level>", "User access level")
   .action((options) => {
     const { username, password, access_level } = options;
     registerUser(username, password, access_level);
