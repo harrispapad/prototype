@@ -33,7 +33,7 @@ async function registerUser(username, password) {
       VALUES (?, ?, ?)
     `;
 
-    const [result] = await connection.execute(insertQuery, [username, hashedPassword]);
+    const [result] = await connection.execute(insertQuery, [username, hashedPassword, acccess_level]);
 
     console.log("User registered successfully with userId:", result.insertId);
 
