@@ -2,9 +2,13 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
+const authRoutes = require('./routes/authRoutes.js');
+const database = require("./db/db")
 
 dotenv.config();
 const app = express();
+
+const port = process.env.PORT;
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
@@ -36,7 +40,7 @@ app.get('/api', (req, res) => {
     res.send(`<h1>Welcome, ${username}!</h1>`);
   });
   
-  connectDB();
+  database.connectDB();
   
   app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
