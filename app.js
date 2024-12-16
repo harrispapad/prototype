@@ -4,9 +4,14 @@ const cors = require("cors");
 const path = require("path");
 const authRoutes = require('./routes/authRoutes.js');
 const database = require("./db/db")
+const { authenticate, authorize } = require('./login/authMiddleware');
+
 
 dotenv.config();
 const app = express();
+
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 const port = process.env.PORT;
 
@@ -38,6 +43,10 @@ app.get('/api', (req, res) => {
     
     // Send the dashboard page with a welcome message
     res.send(`<h1>Welcome, ${username}!</h1>`);
+  });
+
+  app.get('/api/admin', authenticate, authorize(['admin']), (req, res) => {
+    res.send(`<h1>Welcome to the admin panel, ${req.user.username}!</h1>`);
   });
   
   database.connectDB();
