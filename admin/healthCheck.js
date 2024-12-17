@@ -1,39 +1,49 @@
-const express = require("express");
+// healthCheck.js
 const mysql = require("mysql2/promise");
 
-const router = express.Router();
-
-// Database connection pool setup (configure with your database credentials)
 const dbConfig = {
-  host: "localhost",   // your database host
-  user: "harris",       // your database user
+  host: "localhost",       // your database host
+  user: "harris",          // your database user
   password: "Database@10", // your database password
-  database: "devOps",   // your database name
+  database: "devOps",      // your database name
 };
 
-const pool = mysql.createPool(dbConfig);
-
-router.get("/healthcheck", async (req, res) => {
-  try {
-    // Prepare the connection string using the manually stored dbConfig
-    const connectionString = `mysql://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}/${dbConfig.database}`;
-
-    // Test the connection to ensure the database is reachable
-    await pool.query("SELECT 1");
-
-    // Return the health check status with the required information
-    res.status(200).json({
-      status: "OK",
-      dbconnection: connectionString,
-    });
-  } catch (error) {
-    // Handle error if database connection or query fails
-    console.error("Error during healthcheck:", error);
-    res.status(401).json({
-      status: "failed",
-      dbconnection: `mysql://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}/${dbConfig.database}`,
-    });
-  }
+// Create the database connection pool with timeout
+const pool = mysql.createPool({
+  host: dbConfig.host,
+  user: dbConfig.user,
+  password: dbConfig.password,
+  database: dbConfig.database,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  timeout: 5000, // Timeout after 5 seconds
 });
 
-module.exports = router;
+const healthCheck = async () => {
+  try {
+
+    // Prepare the connection string
+    const connectionString = `mysql://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}/${dbConfig.database}`;
+
+    // Test the connection
+    await pool.query("SELECT 1");
+
+    // Return health check status
+    return {
+      status: "OK",
+      dbconnection: connectionString,
+    };
+  } catch (error) {
+    console.error("Error during healthcheck:", error);
+
+    // Return error status
+    return {
+      status: "failed",
+      dbconnection: `mysql://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}/${dbConfig.database}`,
+      error: error.message,
+    };
+  }
+};
+
+module.exports = healthCheck;

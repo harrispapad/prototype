@@ -42,7 +42,7 @@ async function registerUser(username, password, access_level) {
 
 // Commander.js setup
 program
-  .name("register-user")
+  .name("se2415")
   .description("Register user")
   .version("1.0.0");
 
@@ -51,7 +51,7 @@ program
   .description("Register a new user")
   .requiredOption("--username <username>", "Username for the new user")
   .requiredOption("--password <password>", "Password for the new user")
-  .option("--access_level <access_level>", "User access level")
+  .requiredOption("--access_level <access_level>", "User access level (tollCompany, admin, privilegedUser")
   .action((options) => {
     const { username, password, access_level } = options;
     registerUser(username, password, access_level);

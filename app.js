@@ -3,9 +3,10 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
 const authRoutes = require('./routes/authRoutes.js');
+const adminRoutes = require("./routes/adminRoutes.js");
 const database = require("./db/db")
 const { authenticate, authorize } = require('./login/authMiddleware');
-const healthcheckRoute = require("./admin/healthCheck.js");
+const healthcheckRoute = require("./routes/adminRoutes.js");
 
 
 dotenv.config();
@@ -50,7 +51,7 @@ app.get('/api/admin', authenticate, authorize(['admin']), (req, res) => {
   res.status(200).sendFile(path.join(__dirname, 'public', 'adminDashboard.html'));
     });
 
-app.use("/api/admin", healthcheckRoute);
+app.use("/api/admin", adminRoutes);
  
 database.connectDB();
   
