@@ -8,6 +8,10 @@ const database = require("./db/db")
 const { authenticate, authorize } = require('./login/authMiddleware');
 const healthcheckRoute = require("./routes/adminRoutes.js");
 
+const { config } = require("./db/dbConfig");
+const connectDB = require("./db/dbConnect")
+
+const db = connectDB();
 
 dotenv.config();
 const app = express();
@@ -52,9 +56,7 @@ app.get('/api/admin', authenticate, authorize(['admin']), (req, res) => {
     });
 
 app.use("/api/admin", adminRoutes);
- 
-database.connectDB();
-  
+   
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
   });

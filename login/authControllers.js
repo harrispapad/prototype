@@ -17,7 +17,7 @@ const login = async (req, res) => {
 
     if (existingUser) {
       if (!existingUser.password) {
-        res.status(401).redirect('api/failedLogin');
+        res.status(401).redirect('./failedLogin');
         return;
       }
 
@@ -39,14 +39,14 @@ const login = async (req, res) => {
           res.redirect(`/api/dashboard?username=${encodeURIComponent(username)}`);
         }
       } else {
-        res.status(401).redirect('api/failedLogin');
+        res.status(401).redirect('./failedLogin');
       }
     } else {
-      res.status(401).redirect('api/failedLogin');
+      res.status(401).redirect('./failedLogin');
     }
   } catch (error) {
     console.log(req.body);
-    res.status(500).redirect('api/failedLogin');
+    res.status(500).redirect('./failedLogin');
   }
 };
 
