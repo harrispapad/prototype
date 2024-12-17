@@ -7,10 +7,10 @@ const DB_HOST = 'localhost';
 const DB_NAME = 'devOps'; // Replace with your database name
 
 // Path to the SQL file
-const SQL_FILE = './sync.sql'; // Ensure this path is correct
+const SQL_FILE = './db/sync.sql'; // Ensure this path is correct
 
 // Command to execute the SQL file
-const command = `mysql -u ${DB_USER} -p${DB_PASSWORD} -h ${DB_HOST} -D ${DB_NAME} < ${SQL_FILE}`;
+const command = `mysql -u ${DB_USER} -p -D ${DB_NAME} < ${SQL_FILE}`;
 
 // Execute the command
 exec(command, (error, stdout, stderr) => {
