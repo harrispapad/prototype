@@ -1,3 +1,7 @@
+const jwt = require("jsonwebtoken");  
+const bcrypt = require("bcryptjs");    
+const { checkRecordExists } = require("../db/db"); 
+
 // Login controller function
 const login = async (req, res) => {
   // Extract username and password from the request body
