@@ -1,7 +1,6 @@
 const { config, db } = require("../db/dbConfig");
 
 const healthCheck = async () => {
-  console.log("HERE")
   try {
     // Prepare the connection string (optional, just for logging purposes)
     const connectionString = `mysql://${config.user}:${config.password}@${config.host}/${config.database}`;

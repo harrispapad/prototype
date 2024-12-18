@@ -22,9 +22,9 @@ const truncate = async (tableName) => {
   }
 };
 
-const fileName = path.join(__dirname, '../', 'tollstations2024.csv'); // Adjust the file path as needed
+const fileName = path.join(__dirname, '../', 'tollstations2024.csv'); 
 
-const insertCSVData = async () => {
+const initStations = async () => {
   try {
     const filePath = path.join(__dirname, '../', 'tollstations2024.csv');
     const data = fs.readFileSync(filePath, 'utf8'); // Read file content
@@ -53,5 +53,5 @@ const insertCSVData = async () => {
 module.exports = {
   checkRecordExists,
   truncate,
-  insertCSVData
+  initStations
 };
