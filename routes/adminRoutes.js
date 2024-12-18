@@ -1,6 +1,17 @@
 // adminRoutes.js
 const express = require("express");
 const router = express.Router();
+const { authenticate, authorize } = require('../login/authMiddleware'); // Middleware for authentication and authorization
+
+app = express();
+
+// Serve the admin dashboard page, protected by authentication and authorization middleware
+app.get('/api/admin', (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public', 'adminDashboard.html'));
+});
+
+app.use('/api/admin/*', authenticate, authorize(['admin']));
+
 
 // Import healthCheck handler from a separate file
 const healthCheck = require("../admin/healthCheck");  
