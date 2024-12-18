@@ -1,23 +1,13 @@
-const mysql = require("mysql2");
-const dotenv = require("dotenv");
-dotenv.config();
-const { config } = require("./dbConfig");
+const { db } = require("./dbConfig");
 
-
-// Create a connection to the database
-const db = mysql.createConnection(config);
-
-
-// Connect to the database
-const connectDB = () => {
-  db.connect((err) => {
-    if (err) {
-      console.error("Database connection failed:", err.stack);
-      process.exit(1); // Exit process if connection fails
-    } else {
-      console.log("Connected to MySQL database");
-    }
-  });
+const connectDB = async () => {
+  try {
+    await db.query("SELECT 1");
+    console.log("Connected to MySQL database");
+  } catch (error) {
+    console.error("Database connection failed:", error.stack);
+    process.exit(1);
+  }
 };
 
-module.exports = connectDB
+module.exports = connectDB;

@@ -1,32 +1,13 @@
-// healthCheck.js
-const mysql = require("mysql2/promise");
-
-const dbConfig = {
-  host: "localhost",       // your database host
-  user: "harris",          // your database user
-  password: "Database@10", // your database password
-  database: "devOps",      // your database name
-};
-
-// Create the database connection pool with timeout
-const pool = mysql.createPool({
-  host: dbConfig.host,
-  user: dbConfig.user,
-  password: dbConfig.password,
-  database: dbConfig.database,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+const { config, db } = require("../db/dbConfig");
 
 const healthCheck = async () => {
+  console.log("HERE")
   try {
+    // Prepare the connection string (optional, just for logging purposes)
+    const connectionString = `mysql://${config.user}:${config.password}@${config.host}/${config.database}`;
 
-    // Prepare the connection string
-    const connectionString = `mysql://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}/${dbConfig.database}`;
-
-    // Test the connection
-    await pool.query("SELECT 1");
+    // Test the connection with a simple query
+    await db.query("SELECT 1");
 
     // Return health check status
     return {
@@ -39,7 +20,7 @@ const healthCheck = async () => {
     // Return error status
     return {
       status: "failed",
-      dbconnection: `mysql://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}/${dbConfig.database}`,
+      dbconnection: `mysql://${config.user}:${config.password}@${config.host}/${config.database}`,
       error: error.message,
     };
   }

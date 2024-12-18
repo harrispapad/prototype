@@ -1,20 +1,14 @@
 // Import required modules
 const express = require("express");           // Import the Express framework for building the server
-const dotenv = require("dotenv");             // Import dotenv to load environment variables from a .env file
 const cors = require("cors");                 // Import CORS to enable Cross-Origin Resource Sharing
 const path = require("path");                 // Import path for handling file and directory paths
 const authRoutes = require('./routes/authRoutes.js'); // Import authentication routes
 const adminRoutes = require("./routes/adminRoutes.js"); // Import admin-specific routes
 const { authenticate, authorize } = require('./login/authMiddleware'); // Middleware for authentication and authorization
 const healthcheckRoute = require("./routes/adminRoutes.js"); // This seems redundant since it points to adminRoutes
-const { config } = require("./db/dbConfig");  // Database configuration (appears unused in this file)
 const connectDB = require("./db/dbConnect");  // Function to connect to the database
 
-// Connect to the database
-const db = connectDB();
-
-// Load environment variables from .env file
-dotenv.config();
+connectDB();
 
 // Initialize Express app
 const app = express();
@@ -39,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Use authentication routes for all root-level endpoints ("/")
-app.use("/", authRoutes);
+app.use('/', authRoutes);
 
 // Redirect the root URL ("/") to the API home page
 app.get('/', (req, res) => {
@@ -50,6 +44,11 @@ app.get('/', (req, res) => {
 app.get('/api', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+app.get('/api/test', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'autogen.html'));
+});
+
 
 // Serve the login page
 app.get('/api/login', (req, res) => {
@@ -63,8 +62,7 @@ app.get('/api/failedLogin', (req, res) => {
 
 // Serve the dashboard page with a personalized welcome message
 app.get('/api/dashboard', (req, res) => {
-    const { username } = req.query; // Extract the 'username' from query parameters
-    res.send(`<h1>Welcome, ${username}!</h1>`); // Send a simple personalized welcome message
+    res.sendFile(path.join(__dirname, 'public', 'autogen.html'));
 });
 
 // Serve the admin dashboard page, protected by authentication and authorization middleware

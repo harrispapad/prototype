@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Main container -->
+    <div class="wrapper">
+        <!-- Top bar -->
+        <div class="top-bar">
+            <a href="#" id="logo-link">
+                <img src="/logo.png" alt="Logo" class="logo">
+            </a>
+            <nav class="nav-links">
+                <a href="#" id="home-link" class="nav-link">Home</a>
+                <a href="/api/payments" class="nav-link">Payments</a>
+                <a href="/api/stats" class="nav-link">Statistics</a>
+            </nav>
+            <button class="logout-button" id="logout">Logout</button>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Updated Welcome Section -->
+            <h1 class="welcome-text">Welcome, <span id="username"></span></h1>
+
+            <div class="buttons-container">
+                <div class="box" onclick="location.href='/api/payments'">Make payments</div>
+                <div class="box" onclick="location.href='/api/stats'">View stats</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script>
+        // Extract 'username' from the query parameters
+        const params = new URLSearchParams(window.location.search);
+        const username = params.get('username');
+
+        // Set the username in the welcome message
+        document.getElementById('username').textContent = username ? username : 'Guest';
+
+        // Function to preserve the 'username' in links
+        function appendUsername(url) {
+            return username ? `${url}?username=${encodeURIComponent(username)}` : url;
+        }
+
+        // Update links dynamically to preserve the query parameter
+        document.getElementById('logo-link').href = appendUsername('/api/dashboard');
+        document.getElementById('home-link').href = appendUsername('/api/dashboard');
+
+        document.getElementById('logout').addEventListener('click', () => {
+    fetch('/api/logout', {
+        method: 'POST',
+    })
+    .then(response => {
+        if (response.ok) {
+            // Redirect to the login page or home page after logout
+            window.location.href = '/api/login';
+        } else {
+            alert('Logout failed! Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error("Error during logout:", error);
+        alert('Something went wrong. Try again.');
+    });
+});
+
+    </script>
+</body>
+</html>

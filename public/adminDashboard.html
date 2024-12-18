@@ -5,8 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Inline styles for the logout button */
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
 </head>
 <body>
+    <!-- Logout Button (Top-Right Corner) -->
+    <button id="logout-btn" class="logout-button">Logout</button>
+
     <div class="container">
         <h1>Admin Dashboard</h1>
         <div class="button-container">
@@ -26,6 +48,25 @@
         </div>
     </div>
 
-    <script src="scripts.js"></script>
+    <!-- Logout Script -->
+    <script>
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            fetch('/api/logout', {
+                method: 'POST',
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Redirect to login page after successful logout
+                    window.location.href = '/api/login';
+                } else {
+                    alert('Logout failed! Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error("Error during logout:", error);
+                alert('Something went wrong. Try again.');
+            });
+        });
+    </script>
 </body>
 </html>

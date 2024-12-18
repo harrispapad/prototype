@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");  
 const bcrypt = require("bcryptjs");    
-const { checkRecordExists } = require("../db/db"); 
+const { checkRecordExists } = require("../db/mySqlFuncs"); 
 
 // Login controller function
 const login = async (req, res) => {
