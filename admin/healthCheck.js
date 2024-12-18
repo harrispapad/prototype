@@ -1,4 +1,5 @@
 const { config, db } = require("../db/dbConfig");
+const { countDistinct } = require("../db/mySqlFuncs")
 
 const healthCheck = async () => {
   try {
@@ -8,10 +9,13 @@ const healthCheck = async () => {
     // Test the connection with a simple query
     await db.query("SELECT 1");
 
+    const n_stations = await countDistinct('tollStations', 'tollId');
+
     // Return health check status
     return {
       status: "OK",
       dbconnection: connectionString,
+      n_stations: n_stations
     };
   } catch (error) {
     console.error("Error during healthcheck:", error);

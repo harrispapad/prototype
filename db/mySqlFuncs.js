@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { db } = require("./dbConfig");
 const path = require("path");
+const { count } = require("console");
 
 const checkRecordExists = async (tableName, column, value) => {
   try {
@@ -48,10 +49,25 @@ const initStations = async () => {
   }
 };
 
+const countDistinct = async (tableName, column) => {
+  try {
+    // Dynamically create the query with the table name and column
+    const query = `SELECT COUNT(DISTINCT ??) AS count FROM ??`;
+
+    // Execute the query, using the table and column parameters
+    const [results] = await db.query(query, [column, tableName]);
+
+    return results[0].count;
+  } catch (err) {
+    throw new Error(`Failed to count distinct values: ${err.message}`);
+  }
+};
+
 
 // Export the configuration and utility functions
 module.exports = {
   checkRecordExists,
   truncate,
-  initStations
+  initStations,
+  countDistinct
 };
