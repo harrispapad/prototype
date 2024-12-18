@@ -50,6 +50,7 @@
 
     <!-- Logout Script -->
     <script>
+        // Handle Logout button click
         document.getElementById('logout-btn').addEventListener('click', () => {
             fetch('/api/logout', {
                 method: 'POST',
@@ -64,6 +65,28 @@
             })
             .catch(error => {
                 console.error("Error during logout:", error);
+                alert('Something went wrong. Try again.');
+            });
+        });
+
+        // Handle Reset Stations button click
+        document.getElementById('resetstations-btn').addEventListener('click', () => {
+            fetch('/api/admin/resetStations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'OK') {
+                    alert('Stations reset successfully!');
+                } else {
+                    alert(`Failed to reset stations: ${data.info}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error during reset:', error);
                 alert('Something went wrong. Try again.');
             });
         });

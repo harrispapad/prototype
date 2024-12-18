@@ -1,7 +1,7 @@
-// Create a connection to the database
-const { db } = require("./dbConfig")
+const fs = require("fs");
+const { db } = require("./dbConfig");
+const path = require("path");
 
-// Function to check if a record exists in a table
 const checkRecordExists = async (tableName, column, value) => {
   try {
     const query = `SELECT * FROM ${tableName} WHERE ${column} = ?`;
@@ -12,8 +12,46 @@ const checkRecordExists = async (tableName, column, value) => {
   }
 };
 
+const truncate = async (tableName) => {
+  try {
+    const query = `TRUNCATE TABLE ${tableName}`;
+    await db.query(query); // No need to capture results, just run the query
+    console.log('Table Truncated succesfully');
+  } catch (err) {
+    throw new Error(`Failed to truncate table: ${err.message}`);
+  }
+};
+
+const fileName = path.join(__dirname, '../', 'tollstations2024.csv'); // Adjust the file path as needed
+
+const insertCSVData = async () => {
+  try {
+    const filePath = path.join(__dirname, '../', 'tollstations2024.csv');
+    const data = fs.readFileSync(filePath, 'utf8'); // Read file content
+    
+    const rows = data.split('\n').slice(1); // Skip header row
+    
+    for (const row of rows) {
+      const values = row.split(',').map(value => value.trim().replace(/"/g, ''));
+      
+      const query = `
+        INSERT INTO tollStations (opId, operator, tollId, name, pm, locality, road, lat, longitude, email, price1, price2, price3, price4)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+      
+      await db.query(query, values);
+    }
+    
+    console.log('CSV data inserted successfully!');
+  } catch (err) {
+    console.error('Error inserting CSV data:', err.message);
+  }
+};
+
 
 // Export the configuration and utility functions
 module.exports = {
   checkRecordExists,
+  truncate,
+  insertCSVData
 };

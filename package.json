@@ -6,9 +6,8 @@
   "description": "",
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPL",
   "dependencies": {
-    "@craco/craco": "^5.9.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "commander": "^12.1.0",
@@ -29,30 +28,11 @@
     "serve-favicon": "^2.5.0",
     "uuid": "^11.0.3"
   },
-  "devDependencies": {
-    "react-scripts": "^5.0.1"
-  },
   "scripts": {
     "start": "nodemon run app.js",
-    "dbSync": "node ./db/dbSync.js",
-    "start-craco": "craco start",
-    "build": "craco build",
-    "test": "craco test --env=jsdom",
-    "eject": "craco eject"
+    "dbSync": "node ./db/dbSync.js"
   },
   "engines": {
     "node": ">=18.x"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
