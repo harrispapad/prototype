@@ -7,11 +7,14 @@ const adminRoutes = require("./routes/adminRoutes.js"); // Import admin-specific
 const { authenticate, authorize } = require('./login/authMiddleware'); // Middleware for authentication and authorization
 const healthcheckRoute = require("./routes/adminRoutes.js"); // This seems redundant since it points to adminRoutes
 const connectDB = require("./db/dbConnect");  // Function to connect to the database
+const favicon = require('serve-favicon');
 
+// Serve favicon from the public directory
 connectDB();
 
 // Initialize Express app
 const app = express();
+app.use(favicon(path.join(__dirname, 'public', 'logo.png')));
 
 // Import middleware to parse cookies
 const cookieParser = require("cookie-parser");
@@ -19,6 +22,15 @@ app.use(cookieParser()); // Use cookie-parser middleware to parse cookies
 
 // Define the port from environment variables
 const port = process.env.PORT;
+
+// Serve static files (e.g., HTML, CSS, JS) from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Enable CORS (Cross-Origin Resource Sharing)
+app.use(cors());
+
+// Middleware to parse JSON data in incoming requests
+app.use(express.json());
 
 // Serve static files (e.g., HTML, CSS, JS) from the 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -45,9 +57,6 @@ app.get('/api', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.get('/api/test', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'autogen.html'));
-});
 
 
 // Serve the login page
@@ -62,7 +71,7 @@ app.get('/api/failedLogin', (req, res) => {
 
 // Serve the dashboard page with a personalized welcome message
 app.get('/api/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'autogen.html'));
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
 // Serve the admin dashboard page, protected by authentication and authorization middleware
