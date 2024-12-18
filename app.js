@@ -77,7 +77,7 @@ app.get('/api/dashboard', (req, res) => {
 app.use('/api/admin/*', authenticate, authorize(['admin']));
 
 // Serve the admin dashboard page, protected by authentication and authorization middleware
-app.get('/api/admin', (req, res) => {
+app.get('/api/admin',  authenticate, authorize(['admin']), (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'public', 'adminDashboard.html'));
 });
 
