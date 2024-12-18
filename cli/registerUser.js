@@ -2,21 +2,15 @@
 
 const bcrypt = require("bcrypt");
 const mysql = require("mysql2/promise");
-const { program } = require("commander");
 
-// Database connection configuration
-const dbConfig = {
-  host: "localhost",
-  user: "harris",
-  password: "Database@10", // Replace with your MySQL root password
-  database: "devOps",
-};
+const { program } = require("commander");
+const { config } = require("../db/dbConfig");
 
 // Function to register a user
 async function registerUser(username, password, access_level) {
   try {
     // Connect to the database
-    const connection = await mysql.createConnection(dbConfig);
+    const connection = await mysql.createConnection(config);
 
     // Hash the password
     const salt = await bcrypt.genSalt(10);
@@ -42,7 +36,7 @@ async function registerUser(username, password, access_level) {
 
 // Commander.js setup
 program
-  .name("se2415")
+  .name("registerUser")
   .description("Register user")
   .version("1.0.0");
 
